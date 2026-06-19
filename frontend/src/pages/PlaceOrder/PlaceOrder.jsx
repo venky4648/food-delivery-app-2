@@ -78,7 +78,7 @@ const handlePayment = async (e) => {
 
     // STEP 1: CREATE PAYMENT ORDER FROM BACKEND
     const paymentRes = await axios.post(
-      "http://localhost:3000/api/payment/create-order",
+      `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
       {
         amount: totalAmount
       }
@@ -88,7 +88,7 @@ const handlePayment = async (e) => {
 
     // STEP 1.5: SAVE ORDER TO DATABASE
     const orderRes = await axios.post(
-      "http://localhost:3000/api/orders/create",
+      `${import.meta.env.VITE_API_URL}/api/orders/create`,
       {
         firstName,
         lastName,
@@ -126,7 +126,7 @@ const handlePayment = async (e) => {
         try {
           // STEP 3: VERIFY PAYMENT
           const verifyResponse = await axios.post(
-            "http://localhost:3000/api/payment/verify-payment",
+            `${import.meta.env.VITE_API_URL}/api/payment/verify-payment`,
             response
           );
           console.log('verifyResponse:', verifyResponse.data);
@@ -134,7 +134,7 @@ const handlePayment = async (e) => {
           if (verifyResponse.data.success) {
             // STEP 4: UPDATE ORDER WITH PAYMENT INFO
             const updateResponse = await axios.post(
-              "http://localhost:3000/api/orders/update-payment",
+              `${import.meta.env.VITE_API_URL}/api/orders/update-payment`,
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
