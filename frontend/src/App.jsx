@@ -1,8 +1,11 @@
 import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
 import PlaceOrder from "./pages/PlaceOrder/PlaceOrder.jsx";
+import ProductDetails from "./pages/ProductDetails/ProductDetails.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import { useState, useContext } from "react";
 import LoginPopUp from "./components/LoginPopUp/LoginPopUp.jsx";
@@ -27,6 +30,7 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer />
       {showAddItem && (
         <AddItemPopUp
           setShowAddItem={setShowAddItem}
@@ -36,6 +40,7 @@ const App = () => {
         <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path="/" element={<Home setShowAddItem={setShowAddItem} />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/Cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
         </Routes>

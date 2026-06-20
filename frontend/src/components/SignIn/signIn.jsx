@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import PropTypes from "prop-types";
 import axios from "axios";
 import { assets } from "../../assets/assets";
+import { toast } from 'react-toastify';
 import { StoreContext } from "../../context/StoreContext";
 
 const SignIn = ({ setShowLogin, setShowSignIn }) => {
@@ -23,20 +24,20 @@ const SignIn = ({ setShowLogin, setShowSignIn }) => {
             const response = await axios.post(`${url}/api/signIn`, values);
             const data = response.data;
             if (data.status) {
-                alert("Sign up successful!");
+                toast.success("Sign up successful!");
                 sessionStorage.setItem("user", JSON.stringify(data.user));
                 sessionStorage.setItem("token", data.token);
                 setUser(data.user);
                 setToken(data.token);
                 setShowSignIn(false);
             } else {
-                alert(data.message || "Sign up failed");
+                toast.error(data.message || "Sign up failed");
             }
         } catch (err) {
             if (err.response && err.response.data && err.response.data.message) {
-                alert(err.response.data.message);
+                toast.error(err.response.data.message);
             } else {
-                alert("Sign up failed");
+                toast.error("Sign up failed");
             }
             console.log(err);
         }

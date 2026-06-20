@@ -10,6 +10,7 @@ const StoreContextProvider = ({ children }) => {
   const [food_list, setFoodList] = useState([]);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const url = import.meta.env.VITE_API_URL;
 
   const fetchFoodList = async () => {
@@ -86,7 +87,9 @@ const StoreContextProvider = ({ children }) => {
     user,
     setUser,
     token,
-    setToken
+    setToken,
+    searchQuery,
+    setSearchQuery
   };
 
   return (

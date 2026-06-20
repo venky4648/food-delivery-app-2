@@ -5,6 +5,7 @@ import "./LoginPopUp.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from 'react-toastify';
 import { StoreContext } from "../../context/StoreContext";
 
 const LoginPopUp = ({ setShowLogin, setShowSignIn }) => {
@@ -25,17 +26,17 @@ const LoginPopUp = ({ setShowLogin, setShowSignIn }) => {
       const response = await axios.post(`${url}/api/login`, values);
       const data = response.data;
       if (data.status) {
-        alert("Login successful!");
+        toast.success("Login successful!");
         sessionStorage.setItem("user", JSON.stringify(data.user));
         sessionStorage.setItem("token", data.token);
         setUser(data.user);
         setToken(data.token);
         setShowLogin(false);
       } else {
-        alert(data.message);
+        toast.error(data.message);
       }
     } catch (err) {
-      alert("Login failed: " + (err.response?.data?.message || err.message));
+      toast.error("Login failed: " + (err.response?.data?.message || err.message));
       console.log(err);
     }
   };

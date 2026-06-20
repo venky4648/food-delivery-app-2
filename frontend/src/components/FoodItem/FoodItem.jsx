@@ -1,12 +1,15 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import "./FoodItem.css";
 import PropTypes from "prop-types";
 import { StoreContext } from "../../context/StoreContext";
+import { toast } from 'react-toastify';
 import axios from "axios";
 
 const FoodItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart, url, fetchFoodList, user, token } = useContext(StoreContext);
+  const navigate = useNavigate();
 
   const handleDelete = async (e) => {
     e.stopPropagation();
@@ -18,14 +21,14 @@ const FoodItem = ({ id, name, price, description, image }) => {
           }
         });
         if (response.data.success) {
-          alert("Item deleted successfully!");
+          toast.success("Item deleted successfully!");
           fetchFoodList();
         } else {
-          alert("Failed to delete item: " + response.data.message);
+          toast.error("Failed to delete item: " + response.data.message);
         }
       } catch (error) {
         console.error("Delete error:", error);
-        alert("Error deleting item: " + error.message);
+        toast.error("Error deleting item: " + error.message);
       }
     }
   };
@@ -37,7 +40,13 @@ const FoodItem = ({ id, name, price, description, image }) => {
   return (
     <div className="food-item">
       <div className="food-item-img-container">
-        <img className="food-item-image" src={resolvedImageSrc} alt={name} />
+        <img 
+          className="food-item-image" 
+          src={resolvedImageSrc} 
+          alt={name} 
+          onClick={() => navigate(`/product/${id}`)}
+          style={{ cursor: 'pointer' }}
+        />
         {user?.role === "admin" && String(id).length > 2 && (
           <button className="delete-btn" onClick={handleDelete} title="Delete Food Item">
             🗑️
@@ -68,7 +77,12 @@ const FoodItem = ({ id, name, price, description, image }) => {
       </div>
       <div className="food-item-info">
         <div className="food-item-name-rating">
-          <p>{name}</p>
+          <p 
+            onClick={() => navigate(`/product/${id}`)} 
+            style={{ cursor: 'pointer' }}
+          >
+            {name}
+          </p>
           <img src={assets.rating_starts} alt="rating stars" />
         </div>
         <p className="food-item-desc">{description}</p>

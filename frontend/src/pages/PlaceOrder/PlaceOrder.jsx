@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../context/StoreContext";
+import { toast } from 'react-toastify';
 import axios from "axios";
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -47,12 +48,12 @@ const handlePayment = async (e) => {
 
   // Validate form
   if (!firstName || !lastName || !email || !street || !city || !region || !zip || !country || !phone) {
-    alert('Please fill all delivery information');
+    toast.error('Please fill all delivery information');
     return;
   }
 
   if (totalAmount <= 0) {
-    alert('Cart is empty. Please add items before proceeding with payment.');
+    toast.error('Cart is empty. Please add items before proceeding with payment.');
     return;
   }
 
@@ -72,7 +73,7 @@ const handlePayment = async (e) => {
     );
 
     if (!res) {
-      alert("Razorpay SDK Failed");
+      toast.error("Razorpay SDK Failed");
       return;
     }
 
@@ -110,7 +111,7 @@ const handlePayment = async (e) => {
     // STEP 2: RAZORPAY OPTIONS
     const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
     if (!razorpayKey) {
-      alert('Razorpay key is not configured in frontend. Add VITE_RAZORPAY_KEY_ID to your frontend .env file.');
+      toast.error('Razorpay key is not configured in frontend. Add VITE_RAZORPAY_KEY_ID to your frontend .env file.');
       return;
     }
 
@@ -143,17 +144,17 @@ const handlePayment = async (e) => {
             );
             console.log('updateResponse:', updateResponse.data);
 
-            alert("Payment Successful");
+            toast.success("Payment Successful");
             // STEP 5: CLEAR CART
             clearCart();
             // STEP 6: REDIRECT TO HOME
             navigate("/");
           } else {
-            alert("Payment Verification Failed");
+            toast.error("Payment Verification Failed");
           }
         } catch (error) {
           console.error('Payment verification error:', error);
-          alert('Payment verification failed: ' + (error.response?.data?.message || error.message));
+          toast.error('Payment verification failed: ' + (error.response?.data?.message || error.message));
         }
       },
 
@@ -177,7 +178,7 @@ const handlePayment = async (e) => {
 
   } catch (error) {
     console.error('Razorpay payment error:', error);
-    alert(error?.response?.data?.message || error?.message || 'Payment initialization failed. Check the console for details.');
+    toast.error(error?.response?.data?.message || error?.message || 'Payment initialization failed. Check the console for details.');
   }
 };
 
